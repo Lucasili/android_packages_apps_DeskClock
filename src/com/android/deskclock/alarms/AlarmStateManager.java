@@ -338,7 +338,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showLowPriorityNotification(context, instance);
+        if (HideNotifications(context)==false) AlarmNotifications.showLowPriorityNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getHighNotificationTime(),
                 instance, AlarmInstance.HIGH_NOTIFICATION_STATE);
     }
@@ -382,7 +382,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showHighPriorityNotification(context, instance);
+        if (HideNotifications(context)==false) AlarmNotifications.showHighPriorityNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getAlarmTime(),
                 instance, AlarmInstance.FIRED_STATE);
     }
@@ -442,7 +442,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(context.getContentResolver(), instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showSnoozeNotification(context, instance);
+        if (HideNotifications(context)==false) AlarmNotifications.showSnoozeNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getAlarmTime(),
                 instance, AlarmInstance.FIRED_STATE);
 
@@ -488,7 +488,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         AlarmInstance.updateInstance(contentResolver, instance);
 
         // Setup instance notification and scheduling timers
-        AlarmNotifications.showMissedNotification(context, instance);
+        if (HideNotifications(context)==false) AlarmNotifications.showMissedNotification(context, instance);
         scheduleInstanceStateChange(context, instance.getMissedTimeToLive(),
                 instance, AlarmInstance.DISMISSED_STATE);
 
@@ -631,7 +631,7 @@ public final class AlarmStateManager extends BroadcastReceiver {
         } else if (instance.mAlarmState == AlarmInstance.SNOOZE_STATE) {
             // We only want to display snooze notification and not update the time,
             // so handle showing the notification directly
-            AlarmNotifications.showSnoozeNotification(context, instance);
+            if (HideNotifications(context)==false) AlarmNotifications.showSnoozeNotification(context, instance);
             scheduleInstanceStateChange(context, instance.getAlarmTime(),
                     instance, AlarmInstance.FIRED_STATE);
         } else if (currentTime.after(highNotificationTime)) {
@@ -867,5 +867,15 @@ public final class AlarmStateManager extends BroadcastReceiver {
             setRtcPowerUp(context,false);
         }
         return isPoAlarm;
+    }
+
+    /**
+     * @return false notification are visible
+     */
+    public static boolean HideNotifications(Context context) {
+        boolean HideN = false;
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        HideN = prefs.getBoolean(SettingsActivity.KEY_HIDE_ALARMS_NOTIFICATIONS, false);
+        return HideN;
     }
 }

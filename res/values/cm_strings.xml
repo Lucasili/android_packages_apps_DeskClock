@@ -94,6 +94,10 @@
     <string name="take_persistent_grant_uri_permission_failed_msg">Failed to take persistent grant permission for ringtone</string>
 
     <string name="default_auto_silence_value" translatable="false">10</string>
+    <string name="hide_alarms_notifications">Hide notifications</string>
+
+    <!-- Setting summary for hiding the alarms notifications -->
+    <string name="hide_alarms_notifications_summary">Hide alarms notifications when an alarm is set</string>
 
     <string name="menu_item_widget_settings">Widget settings</string>
     <string name="activity_not_found">Activity not found!</string>
