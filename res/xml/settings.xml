@@ -93,5 +93,12 @@
             android:summary="@string/show_status_bar_icon_summary"
             android:persistent="false"
             android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="hide_notifications"
+            android:title="@string/hide_alarms_notifications"
+            android:summary="@string/hide_alarms_notifications_summary"
+            android:defaultValue="false"  />
+
     </PreferenceCategory>
 </PreferenceScreen>
