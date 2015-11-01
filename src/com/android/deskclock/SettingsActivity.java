@@ -71,6 +71,8 @@ public class SettingsActivity extends PreferenceActivity
     public static final String KEY_VOLUME_BUTTONS =
             "volume_button_setting";
     public static final String KEY_ALARM_SETTINGS = "key_alarm_settings";
+    public static final String KEY_HIDE_ALARMS_NOTIFICATIONS =
+            "hide_notifications";
 
     public static final String DEFAULT_VOLUME_BEHAVIOR = "0";
     public static final String VOLUME_BEHAVIOR_SNOOZE = "1";
@@ -81,6 +83,7 @@ public class SettingsActivity extends PreferenceActivity
     private static Locale mLocale;
     private long mTime;
     private SwitchPreference mAlarmIcon;
+    private SwitchPreference mHideNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,10 @@ public class SettingsActivity extends PreferenceActivity
         mAlarmIcon = (SwitchPreference) findPreference(KEY_SHOW_STATUS_BAR_ICON);
         mAlarmIcon.setChecked(Settings.System.getInt(getContentResolver(),
                 Settings.System.SHOW_ALARM_ICON, 1) == 1);
+
+        mHideNotification = (SwitchPreference) findPreference(KEY_HIDE_ALARMS_NOTIFICATIONS);
+        mHideNotification.setChecked(Settings.System.getInt(getContentResolver(),
+                Settings.System.HIDE_ALARMS_NOTIFICATIONS, 1) == 1);
     }
 
     @Override
@@ -175,6 +182,10 @@ public class SettingsActivity extends PreferenceActivity
             // Check if any alarms are active. If yes and
             // we allow showing the alarm icon, the icon will be shown.
             Settings.System.putInt(getContentResolver(), Settings.System.SHOW_ALARM_ICON,
+                    (Boolean) newValue ? 1 : 0);
+        } else if (KEY_HIDE_ALARMS_NOTIFICATIONS.equals(pref.getKey())) {
+            // Enable or disable alarm notifications
+            Settings.System.putInt(getContentResolver(), Settings.System.HIDE_ALARMS_NOTIFICATIONS,
                     (Boolean) newValue ? 1 : 0);
         }
         return true;
@@ -271,6 +282,9 @@ public class SettingsActivity extends PreferenceActivity
 
         SwitchPreference hideStatusbarIcon = (SwitchPreference) findPreference(KEY_SHOW_STATUS_BAR_ICON);
         hideStatusbarIcon.setOnPreferenceChangeListener(this);
+
+        SwitchPreference hideAlarmsNotifications = (SwitchPreference) findPreference(KEY_HIDE_ALARMS_NOTIFICATIONS);
+        hideAlarmsNotifications.setOnPreferenceChangeListener(this);
 
         SnoozeLengthDialog snoozePref = (SnoozeLengthDialog) findPreference(KEY_ALARM_SNOOZE);
         snoozePref.setSummary();
